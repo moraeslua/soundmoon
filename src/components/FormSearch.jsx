@@ -3,14 +3,13 @@ import PropTypes from 'prop-types';
 
 class FormSearch extends React.Component {
   render() {
-    const { searchName, searchButtonIsDisabled, onChange, onClick } = this.props;
+    const { searchButtonIsDisabled, onChange, onClick } = this.props;
     return (
       <div data-testid="page-login">
         <form>
           <input
-            id="searchName"
+            id="searchedName"
             data-testid="search-artist-input"
-            value={ searchName }
             onChange={ onChange }
           />
           <button
@@ -29,7 +28,6 @@ class FormSearch extends React.Component {
 }
 
 FormSearch.propTypes = {
-  searchName: PropTypes.string.isRequired,
   searchButtonIsDisabled: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,
   onClick: PropTypes.func.isRequired,
