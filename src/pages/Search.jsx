@@ -31,7 +31,7 @@ class Search extends React.Component {
       <div data-testid="page-search">
         <Header />
         <FormSearch
-          loginButtonIsDisabled={ searchButtonIsDisabled }
+          searchButtonIsDisabled={ searchButtonIsDisabled }
           onChange={ this.handleOnChange }
           onClick={ this.handleSearchButton }
         />

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 class FormSearch extends React.Component {
   render() {
-    const { searchName, loginButtonIsDisabled, onChange, onClick } = this.props;
+    const { searchName, searchButtonIsDisabled, onChange, onClick } = this.props;
     return (
       <div data-testid="page-login">
         <form>
@@ -17,7 +17,7 @@ class FormSearch extends React.Component {
             id="searchButton"
             type="button"
             data-testid="search-artist-button"
-            disabled={ loginButtonIsDisabled }
+            disabled={ searchButtonIsDisabled }
             onClick={ onClick }
           >
             Pesquisar
@@ -30,7 +30,7 @@ class FormSearch extends React.Component {
 
 FormSearch.propTypes = {
   searchName: PropTypes.string.isRequired,
-  loginButtonIsDisabled: PropTypes.bool.isRequired,
+  searchButtonIsDisabled: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,
   onClick: PropTypes.func.isRequired,
 };
