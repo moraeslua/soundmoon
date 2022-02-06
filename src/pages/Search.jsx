@@ -41,7 +41,6 @@ class Search extends React.Component {
 
   render() {
     const { searchButtonIsDisabled, artistAlbums, searchedName, loading } = this.state;
-    console.log('artistAlbumsInSearch', artistAlbums);
     return (
       <div data-testid="page-search">
         <Header />
