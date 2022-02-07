@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import getMusics from '../services/musicsAPI';
 import MusicCard from '../components/MusicCard';
-import { addSong, removeSong } from '../services/favoriteSongsAPI';
+import { addSong, removeSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
 import LoadingMessage from '../components/LoadingMessage';
 
 class Album extends React.Component {
@@ -20,8 +20,11 @@ class Album extends React.Component {
     });
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.getAlbumSongs();
+    const favoriteSongsFromAPI = await getFavoriteSongs();
+    const favoriteSongsIds = favoriteSongsFromAPI.map((song) => song.trackId);
+    this.setState({ favoriteSongsIds });
   }
 
   // Id de cada música é passado para a função no map lá embaixo.
@@ -31,6 +34,7 @@ class Album extends React.Component {
     // Se dentro do state FavoriteSongsIds existir algum id igual ao que está sendo passado por parametro,
     // significa que o elemento que contém esse id é checked e que o usuário quer remover ele das músicas favoritas.
     const isRemoving = favoriteSongsIds.some((id) => id === trackId);
+    console.log(isRemoving);
     const foundSong = albumSongs.find((song) => song.trackId === trackId);
     if (!isRemoving) {
       await addSong(foundSong);
