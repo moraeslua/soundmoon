@@ -108,7 +108,6 @@ class ProfileEdit extends React.Component {
               data-testid="edit-input-image"
               type="text"
               value={ image }
-              alt="foto de perfil do usuário"
               onChange={ this.handleOnChange }
             />
             <button
