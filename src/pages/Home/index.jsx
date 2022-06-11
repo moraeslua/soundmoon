@@ -1,9 +1,9 @@
 import React from 'react';
-import Header from '../components/Header';
-import FormSearch from '../components/FormSearch';
-import searchAlbumsAPI from '../services/searchAlbumsAPI';
-import LoadingMessage from '../components/LoadingMessage';
-import AlbumsList from '../components/AlbumsList';
+import Header from '../../components/Header';
+import FormSearch from '../../components/SearchBar';
+import searchAlbumsAPI from '../../services/searchAlbumsAPI';
+import LoadingMessage from '../../components/Loading';
+import AlbumsList from '../../components/AlbumSongs';
 
 class Search extends React.Component {
   state = {

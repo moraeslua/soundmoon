@@ -1,8 +1,8 @@
 import React from 'react';
 import { Redirect } from 'react-router';
-import { createUser } from '../services/userAPI';
-import LoadingMessage from '../components/LoadingMessage';
-import FormLogin from '../components/FormLogin';
+import { createUser } from '../../services/userAPI';
+import LoadingMessage from '../../components/Loading';
+import Form from '../../components/LoginForm';
 
 class Login extends React.Component {
   state = {
@@ -38,7 +38,7 @@ class Login extends React.Component {
     const { loginName, loginButtonIsDisabled, loading, shouldRedirect } = this.state;
     return (
       <div>
-        {loading ? <LoadingMessage /> : <FormLogin
+        {loading ? <LoadingMessage /> : <Form
           loginName={ loginName }
           loginButtonIsDisabled={ loginButtonIsDisabled }
           onChange={ this.handleOnChange }

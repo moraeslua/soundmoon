@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Header from '../components/Header';
-import getMusics from '../services/musicsAPI';
-import MusicCard from '../components/MusicCard';
-import { addSong, removeSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
-import LoadingMessage from '../components/LoadingMessage';
+import Header from '../../components/Header';
+import getMusics from '../../services/musicsAPI';
+import MusicCard from '../../components/MusicCard';
+import { addSong, removeSong, getFavoriteSongs } from '../../services/favoriteSongsAPI';
+import LoadingMessage from '../../components/Loading';
 
 class Album extends React.Component {
   constructor(props) {

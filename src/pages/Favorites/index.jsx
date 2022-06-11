@@ -1,8 +1,8 @@
 import React from 'react';
-import Header from '../components/Header';
-import MusicCard from '../components/MusicCard';
-import { getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
-import LoadingMessage from '../components/LoadingMessage';
+import Header from '../../components/Header';
+import MusicCard from '../../components/MusicCard';
+import { getFavoriteSongs, removeSong } from '../../services/favoriteSongsAPI';
+import LoadingMessage from '../../components/Loading';
 
 class Favorites extends React.Component {
   state = {
@@ -42,7 +42,8 @@ class Favorites extends React.Component {
                 previewUrl={ songInfo.previewUrl }
                 checked={ favoriteSongs.some((s) => s.trackId === songInfo.trackId) }
                 onChange={ () => this.handleRemoveFavoriteSong(songInfo) }
-              />);
+              />
+            );
           }))}
         </div>
       </div>
