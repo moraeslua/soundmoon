@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getUser } from '../services/userAPI';
-import LoadingMessage from './LoadingMessage';
+import { getUser } from '../../services/userAPI';
+import LoadingMessage from '../Loading';
 
 class Header extends React.Component {
   state = {

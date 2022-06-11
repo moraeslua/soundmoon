@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-class AlbumsList extends React.Component {
+class SongsList extends React.Component {
   render() {
     const { searchedName, artistAlbums } = this.props;
     return (
@@ -28,9 +28,9 @@ class AlbumsList extends React.Component {
   }
 }
 
-AlbumsList.propTypes = {
+SongsList.propTypes = {
   searchedName: PropTypes.string.isRequired,
   artistAlbums: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-export default AlbumsList;
+export default SongsList;
