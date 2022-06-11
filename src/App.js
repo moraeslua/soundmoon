@@ -2,12 +2,12 @@ import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import Login from './pages/Login';
-import Search from './pages/Search';
+import Search from './pages/Home';
 import Album from './pages/Album';
 import NotFound from './pages/NotFound';
 import Favorites from './pages/Favorites';
 import Profile from './pages/Profile';
-import ProfileEdit from './pages/ProfileEdit';
+import ProfileEdit from './pages/Profile/edit';
 import GlobalStyle from './assets/styles/global';
 import defaultTheme from './assets/styles/themes/default';
 
