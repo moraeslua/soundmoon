@@ -1,3 +1,7 @@
+import { changeArtworkResolution } from '../utils';
+
+const ARTWORK_500 = 500;
+
 const searchAlbumsAPI = async (artist) => {
   const artistNameURL = encodeURI(artist).replaceAll('%20', '+');
 
@@ -16,6 +20,7 @@ const searchAlbumsAPI = async (artist) => {
       collectionPrice,
       artworkUrl100,
       releaseDate,
+      collectionType,
       trackCount,
     }) => ({
       artistId,
@@ -23,9 +28,11 @@ const searchAlbumsAPI = async (artist) => {
       collectionId,
       collectionName,
       collectionPrice,
-      artworkUrl100,
+      collectionType,
       releaseDate,
+      releaseYear: new Date(releaseDate).getFullYear(),
       trackCount,
+      artworkUrl500: changeArtworkResolution(artworkUrl100, ARTWORK_500),
     }),
   );
   return response;
