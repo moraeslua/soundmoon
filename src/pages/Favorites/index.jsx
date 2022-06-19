@@ -32,34 +32,38 @@ class Favorites extends React.Component {
       loading ? <LoadingMessage /> : (
         <C.Container data-testid="page-favorites">
           <C.SongsContainer>
-            {favoriteSongs.map((songInfo) => {
-              const {
-                trackId,
-                trackName,
-                previewUrl,
-                artistName,
-                collectionName,
-                artworkUrl500,
-                collectionId,
-              } = songInfo;
-              return (
-                <MusicCard
-                  key={ trackId }
-                  data={
-                    { trackId: parseInt(trackId, 10),
-                      trackName,
-                      previewUrl,
-                      artistName,
-                      collectionName,
-                      artworkUrl500,
-                      collectionId,
-                      from: 'favorites' }
-                  }
-                  checked={ favoriteSongs.some((s) => s.trackId === trackId) }
-                  onChange={ () => this.handleRemoveFavoriteSong(songInfo) }
-                />
-              );
-            })}
+            {favoriteSongs.length ? (
+              favoriteSongs.map((songInfo) => {
+                const {
+                  trackId,
+                  trackName,
+                  previewUrl,
+                  artistName,
+                  collectionName,
+                  artworkUrl500,
+                  collectionId,
+                } = songInfo;
+                return (
+                  <MusicCard
+                    key={ trackId }
+                    data={
+                      { trackId: parseInt(trackId, 10),
+                        trackName,
+                        previewUrl,
+                        artistName,
+                        collectionName,
+                        artworkUrl500,
+                        collectionId,
+                        from: 'favorites' }
+                    }
+                    checked={ favoriteSongs.some((s) => s.trackId === trackId) }
+                    onChange={ () => this.handleRemoveFavoriteSong(songInfo) }
+                  />
+                );
+              })
+            ) : (
+              <h2>Você ainda não tem músicas favoritadas</h2>
+            )}
           </C.SongsContainer>
         </C.Container>
       )
