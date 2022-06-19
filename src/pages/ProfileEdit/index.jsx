@@ -53,6 +53,11 @@ class ProfileEdit extends React.Component {
     this.setState({ loading: false, redirect: true });
   }
 
+  handleOnSubmit = (e) => {
+    e.preventDefault();
+    this.handleSaveButton();
+  }
+
   render() {
     const {
       userInfo:
@@ -78,7 +83,7 @@ class ProfileEdit extends React.Component {
                 src={ image || defaultProfile }
                 alt="foto do usuário"
               />
-              <C.Form>
+              <C.Form onSubmit={ this.handleOnSubmit }>
                 <C.Field>
                   <h4>Foto</h4>
                   <input
@@ -120,7 +125,7 @@ class ProfileEdit extends React.Component {
                 </C.Field>
                 <C.Button
                   data-testid="edit-button-save"
-                  type="button"
+                  type="submit"
                   disabled={ isSaveButtonDisabled }
                   onClick={ this.handleSaveButton }
                 >

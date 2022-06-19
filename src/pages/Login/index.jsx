@@ -27,11 +27,16 @@ class Login extends React.Component {
     });
   }
 
-  handleSubmitButton = async () => {
+  handleLoginButton = async () => {
     const { userName } = this.state;
     this.setState({ loading: true });
     await createUser({ name: userName });
     this.setState({ loading: false, shouldRedirect: true });
+  }
+
+  handleOnLoginSubmit = (e) => {
+    e.preventDefault();
+    this.handleLoginButton();
   }
 
   render() {
@@ -45,7 +50,7 @@ class Login extends React.Component {
                 <C.Mooncloud />
                 <C.Title>soundmoon</C.Title>
               </C.Logo>
-              <C.Form data-testid="page-login">
+              <C.Form data-testid="page-login" onSubmit={ this.handleOnLoginSubmit }>
                 <C.Input
                   id="userName"
                   placeholder="Insira seu nome"
@@ -58,7 +63,7 @@ class Login extends React.Component {
                   type="button"
                   data-testid="login-submit-button"
                   disabled={ buttonIsDisabled }
-                  onClick={ this.handleSubmitButton }
+                  onClick={ this.handleLoginButton }
                 >
                   Entrar
                 </C.Button>
