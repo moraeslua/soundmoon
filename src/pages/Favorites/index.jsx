@@ -1,8 +1,8 @@
 import React from 'react';
-import Header from '../../components/Header';
 import MusicCard from '../../components/MusicCard';
 import { getFavoriteSongs, removeSong } from '../../services/favoriteSongsAPI';
 import LoadingMessage from '../../components/Loading';
+import * as C from './style';
 
 class Favorites extends React.Component {
   state = {
@@ -29,24 +29,40 @@ class Favorites extends React.Component {
   render() {
     const { favoriteSongs, loading } = this.state;
     return (
-      <div data-testid="page-favorites">
-        <Header />
-        <div>
-          {loading ? <LoadingMessage /> : (favoriteSongs.map((songInfo) => {
-            console.log(typeof songInfo.trackId);
-            return (
-              <MusicCard
-                key={ songInfo.trackName }
-                trackId={ parseInt(songInfo.trackId, 10) }
-                trackName={ songInfo.trackName }
-                previewUrl={ songInfo.previewUrl }
-                checked={ favoriteSongs.some((s) => s.trackId === songInfo.trackId) }
-                onChange={ () => this.handleRemoveFavoriteSong(songInfo) }
-              />
-            );
-          }))}
-        </div>
-      </div>
+      loading ? <LoadingMessage /> : (
+        <C.Container data-testid="page-favorites">
+          <C.SongsContainer>
+            {favoriteSongs.map((songInfo) => {
+              const {
+                trackId,
+                trackName,
+                previewUrl,
+                artistName,
+                collectionName,
+                artworkUrl500,
+                collectionId,
+              } = songInfo;
+              return (
+                <MusicCard
+                  key={ trackId }
+                  data={
+                    { trackId: parseInt(trackId, 10),
+                      trackName,
+                      previewUrl,
+                      artistName,
+                      collectionName,
+                      artworkUrl500,
+                      collectionId,
+                      from: 'favorites' }
+                  }
+                  checked={ favoriteSongs.some((s) => s.trackId === trackId) }
+                  onChange={ () => this.handleRemoveFavoriteSong(songInfo) }
+                />
+              );
+            })}
+          </C.SongsContainer>
+        </C.Container>
+      )
     );
   }
 }
