@@ -1,19 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Header from '../../components/Header';
 import getMusics from '../../services/musicsAPI';
 import MusicCard from '../../components/MusicCard';
 import { addSong, removeSong, getFavoriteSongs } from '../../services/favoriteSongsAPI';
 import LoadingMessage from '../../components/Loading';
+import MusicPlayerContext from '../../context/MusicPlayerContext';
+import * as C from './styles';
 
 class Album extends React.Component {
   constructor(props) {
     super(props);
     const { match: { params: { id } } } = props;
     this.state = ({
-      albumId: id,
+      collectionId: id,
       artistName: '',
       collectionName: '',
+      artworkUrl500: '',
+      trackCount: 0,
       albumSongs: [],
       loading: false,
       favoriteSongsIds: [],
@@ -27,15 +30,13 @@ class Album extends React.Component {
     this.setState({ favoriteSongsIds });
   }
 
-  // Id de cada música é passado para a função no map lá embaixo.
   handleFavoriteSongs = async (trackId) => {
     this.setState({ loading: true });
+
     const { albumSongs, favoriteSongsIds } = this.state;
-    // Se dentro do state FavoriteSongsIds existir algum id igual ao que está sendo passado por parametro,
-    // significa que o elemento que contém esse id é checked e que o usuário quer remover ele das músicas favoritas.
     const isRemoving = favoriteSongsIds.some((id) => id === trackId);
-    console.log(isRemoving);
     const foundSong = albumSongs.find((song) => song.trackId === trackId);
+
     if (!isRemoving) {
       await addSong(foundSong);
       const newFavorites = [...favoriteSongsIds, trackId];
@@ -48,44 +49,87 @@ class Album extends React.Component {
   }
 
   getAlbumSongs = async () => {
-    const { albumId } = this.state;
-    const albumSongsData = await getMusics(albumId);
+    this.setState({ loading: true });
+
+    const { collectionId } = this.state;
+    const albumSongsData = await getMusics(collectionId);
+
+    const { history } = this.props;
+
+    if (!albumSongsData) {
+      this.setState({ loading: false });
+      history.push('/404');
+      return;
+    }
+
     const albumSongs = albumSongsData.filter((_song, index) => index !== 0);
-    const { artistName, collectionName } = albumSongsData[0];
+
+    const { artistName, collectionName, artworkUrl500, trackCount } = albumSongsData[0];
     this.setState({
       artistName,
       collectionName,
+      artworkUrl500,
       albumSongs,
+      trackCount,
     });
+
+    this.setState({ loading: false });
   }
 
   render() {
     const {
+      collectionId,
       albumSongs,
       artistName,
       collectionName,
       favoriteSongsIds,
       loading,
+      artworkUrl500,
+      trackCount,
     } = this.state;
     return (
-      <div data-testid="page-album">
-        <Header />
+      <C.Container data-testid="page-album">
         {loading ? <LoadingMessage />
           : (
-            <div>
-              <h2 data-testid="artist-name">{artistName}</h2>
-              <h3 data-testid="album-name">{collectionName}</h3>
-              {albumSongs.map((songInfo) => (<MusicCard
-                key={ songInfo.trackName }
-                trackId={ songInfo.trackId }
-                trackName={ songInfo.trackName }
-                previewUrl={ songInfo.previewUrl }
-                checked={ favoriteSongsIds.includes(songInfo.trackId) }
-                onChange={ () => this.handleFavoriteSongs(songInfo.trackId) }
-              />))}
-            </div>
+            <>
+              <C.CollectionContainer>
+                <img src={ artworkUrl500 } alt={ collectionName } />
+                <C.Content>
+                  <h3 data-testid="album-name">{collectionName}</h3>
+                  <h5 data-testid="artist-name">
+                    {artistName}
+                    {' '}
+                    |
+                    {' '}
+                    {trackCount}
+                    {' '}
+                    songs
+                  </h5>
+                </C.Content>
+              </C.CollectionContainer>
+              <C.SongsContainer>
+                <C.SongsList>
+                  {albumSongs.map(({ trackId, trackName, previewUrl }) => (
+                    <MusicCard
+                      key={ trackId }
+                      data={
+                        { trackId,
+                          trackName,
+                          previewUrl,
+                          artistName,
+                          collectionName,
+                          collectionId,
+                          artworkUrl500,
+                          from: 'album' }
+                      }
+                      checked={ favoriteSongsIds.includes(trackId) }
+                      onChange={ () => this.handleFavoriteSongs(trackId) }
+                    />))}
+                </C.SongsList>
+              </C.SongsContainer>
+            </>
           )}
-      </div>
+      </C.Container>
     );
   }
 }
@@ -96,6 +140,9 @@ Album.propTypes = {
       id: PropTypes.string,
     }),
   }).isRequired,
+  history: PropTypes.shape({ push: PropTypes.func }).isRequired,
 };
+
+Album.contextType = MusicPlayerContext;
 
 export default Album;
