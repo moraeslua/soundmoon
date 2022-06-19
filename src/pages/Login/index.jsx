@@ -2,13 +2,13 @@ import React from 'react';
 import { Redirect } from 'react-router';
 import { createUser } from '../../services/userAPI';
 import LoadingMessage from '../../components/Loading';
-import Form from '../../components/LoginForm';
+import * as C from './styles';
 
 class Login extends React.Component {
   state = {
     loading: false,
-    loginName: '',
-    loginButtonIsDisabled: true,
+    userName: '',
+    buttonIsDisabled: true,
     shouldRedirect: false,
   };
 
@@ -21,31 +21,53 @@ class Login extends React.Component {
 
   handleLoginButtonState = () => {
     const MAX_VALUE = 3;
-    const { loginName } = this.state;
+    const { userName } = this.state;
     this.setState({
-      loginButtonIsDisabled: loginName.length < MAX_VALUE,
+      buttonIsDisabled: userName.length < MAX_VALUE,
     });
   }
 
   handleSubmitButton = async () => {
-    const { loginName } = this.state;
+    const { userName } = this.state;
     this.setState({ loading: true });
-    await createUser({ name: loginName });
+    await createUser({ name: userName });
     this.setState({ loading: false, shouldRedirect: true });
   }
 
   render() {
-    const { loginName, loginButtonIsDisabled, loading, shouldRedirect } = this.state;
+    const { userName, buttonIsDisabled, loading, shouldRedirect } = this.state;
     return (
-      <div>
-        {loading ? <LoadingMessage /> : <Form
-          loginName={ loginName }
-          loginButtonIsDisabled={ loginButtonIsDisabled }
-          onChange={ this.handleOnChange }
-          onClick={ this.handleSubmitButton }
-        />}
-        {shouldRedirect && <Redirect to="/search" />}
-      </div>
+      <C.Container>
+        <C.Opacity>
+          {loading ? <LoadingMessage /> : (
+            <C.Main>
+              <C.Logo>
+                <C.Mooncloud />
+                <C.Title>soundmoon</C.Title>
+              </C.Logo>
+              <C.Form data-testid="page-login">
+                <C.Input
+                  id="userName"
+                  placeholder="Insira seu nome"
+                  data-testid="login-name-input"
+                  value={ userName }
+                  onChange={ this.handleOnChange }
+                />
+                <C.Button
+                  id="loginButton"
+                  type="button"
+                  data-testid="login-submit-button"
+                  disabled={ buttonIsDisabled }
+                  onClick={ this.handleSubmitButton }
+                >
+                  Entrar
+                </C.Button>
+              </C.Form>
+            </C.Main>
+          )}
+          {shouldRedirect && <Redirect to="/search" />}
+        </C.Opacity>
+      </C.Container>
     );
   }
 }
