@@ -1,16 +1,16 @@
 import React from 'react';
-import Header from '../../components/Header';
-import FormSearch from '../../components/SearchBar';
 import searchAlbumsAPI from '../../services/searchAlbumsAPI';
 import LoadingMessage from '../../components/Loading';
-import AlbumsList from '../../components/AlbumSongs';
+import AlbumCard from '../../components/AlbumCard';
+import MusicPlayerContext from '../../context/MusicPlayerContext';
+import * as C from './styles';
 
-class Search extends React.Component {
+class Home extends React.Component {
   state = {
     searchedName: '',
     searchButtonIsDisabled: true,
     loading: false,
-    artistAlbums: [],
+    artistAlbums: null,
   }
 
   componentDidMount() {
@@ -33,28 +33,69 @@ class Search extends React.Component {
   }
 
   handleSearchButton = async () => {
+    this.setState({ artistAlbums: null });
     this.setState({ loading: true });
     const { searchedName } = this.state;
     const albumsArray = await searchAlbumsAPI(searchedName);
     this.setState({ artistAlbums: albumsArray, loading: false });
   };
 
+  handleSearchSubmit = (e) => {
+    e.preventDefault();
+    this.handleSearchButton();
+  }
+
   render() {
     const { searchButtonIsDisabled, artistAlbums, searchedName, loading } = this.state;
     return (
-      <div data-testid="page-search">
-        <Header />
-        {loading ? <LoadingMessage /> : <FormSearch
-          searchButtonIsDisabled={ searchButtonIsDisabled }
-          onChange={ this.handleOnChange }
-          onClick={ this.handleSearchButton }
-        />}
-        {artistAlbums.length === 0
-          ? <p>Nenhum álbum foi encontrado</p>
-          : <AlbumsList searchedName={ searchedName } artistAlbums={ artistAlbums } /> }
-      </div>
+      <C.Container data-testid="page-search">
+        {loading ? <LoadingMessage /> : (
+          <C.SearchContainer>
+            <C.Form onSubmit={ this.handleSearchSubmit }>
+              <C.SearchBar
+                id="searchedName"
+                placeholder="Procure por um artista"
+                data-testid="search-artist-input"
+                onChange={ this.handleOnChange }
+              />
+              <C.SearchButton
+                id="searchButton"
+                type="button"
+                data-testid="search-artist-button"
+                disabled={ searchButtonIsDisabled }
+                onClick={ this.handleSearchButton }
+              >
+                Pesquisar
+              </C.SearchButton>
+            </C.Form>
+            { !artistAlbums && <C.Feedback>O que você quer ouvir hoje?</C.Feedback>}
+            { artistAlbums?.length === 0
+              && <C.Feedback>Nenhum álbum foi encontrado</C.Feedback>}
+            {artistAlbums?.length > 0 && (
+              <C.Feedback>
+                Resultados para álbuns de:
+                {' '}
+                {searchedName}
+              </C.Feedback>
+            )}
+          </C.SearchContainer>
+        )}
+        { artistAlbums?.length > 0 && (
+          <C.UnorderedList>
+            {
+              artistAlbums.map((album) => (
+                <li key={ album.collectionId }>
+                  <AlbumCard album={ album } />
+                </li>
+              ))
+            }
+          </C.UnorderedList>
+        )}
+      </C.Container>
     );
   }
 }
 
-export default Search;
+Home.contextType = MusicPlayerContext;
+
+export default Home;
