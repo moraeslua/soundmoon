@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Header from '../../components/Header';
 import { getUser } from '../../services/userAPI';
 import LoadingMessage from '../../components/Loading';
+import defaultProfile from '../../assets/images/default_profile.jpg';
+import * as C from './styles';
 
 class Profile extends React.Component {
   state = {
@@ -18,21 +19,35 @@ class Profile extends React.Component {
   render() {
     const { name, email, image, description, loading } = this.state;
     return (
-      <main>
-        <Header />
+      <C.Container>
         {loading ? <LoadingMessage /> : (
-          <div data-testid="page-profile">
-            <img data-testid="profile-image" src={ image } alt="foto do usuário" />
-            <Link to="/profile/edit">Editar perfil</Link>
-            <h3>Nome</h3>
-            <p>{name}</p>
-            <h3>Email</h3>
-            <p>{email}</p>
-            <h3>Descrição</h3>
-            <p>{description}</p>
-          </div>
+          <C.Details data-testid="page-profile">
+            <C.Title>Seu perfil</C.Title>
+            <C.ProfileImg
+              data-testid="profile-image"
+              src={ image || defaultProfile }
+              alt="foto do usuário"
+            />
+            <C.Field>
+              <h4>Nome</h4>
+              <h5>{name}</h5>
+            </C.Field>
+            <C.Field>
+              <h4>Email</h4>
+              <h5>{email}</h5>
+            </C.Field>
+            <C.Field>
+              <h4>Descrição</h4>
+              <h5>{description}</h5>
+            </C.Field>
+            <Link to="/profile/edit">
+              <C.Button>
+                Editar perfil
+              </C.Button>
+            </Link>
+          </C.Details>
         )}
-      </main>
+      </C.Container>
     );
   }
 }
